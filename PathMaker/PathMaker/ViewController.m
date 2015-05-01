@@ -35,7 +35,7 @@
     [self calculateShortestDistance];
     [self calculateShortestDistanceToCoordinate];
     [self indexFinder];
-    
+    [self shortestdistanceToStation];
     //Copying the coordinate for the shortest distance from the user to the specific location in the track/path/loop
    // coordinate = [self calculateShortestDistanceToCoordinate];
     MKCoordinateRegion region;
@@ -292,6 +292,31 @@
     return locu;
 }
 
+//Compare the values in arrayofLocs to the position of the user
+-(float) calculateShortestDistanceToUser {
+    NSMutableArray *arrayOfLocation = [self arrayofLocs];
+    CLLocation *updatedLocation;
+    float shortestDistance=1000;
+    float locudistance;
+    CLLocation *givenCoordinate = [[CLLocation alloc] initWithLatitude:32.860620 longitude:-96.990295];
+    float distance;
+    int i;
+    for (i=0; i<arrayOfLocation.count; i++) {
+        distance = [arrayOfLocation[i] distanceFromLocation:givenCoordinate];
+        if(shortestDistance > distance)
+        {
+            shortestDistance=distance;
+            updatedLocation=arrayOfLocation[i];
+            
+        }
+        // NSLog(@"%f",shortestDistance);
+        
+    }
+    //  NSLog(@"%f %f",updatedLocation.coordinate.latitude, updatedLocation.coordinate.longitude);
+    
+    locudistance  = shortestDistance;
+    return locudistance;
+}
 
 -(float) indexFinder {
     float  finder;
@@ -338,5 +363,14 @@
 }
 
 
+//Shortest distance to a station including the current user's position to
 
+-(float) shortestdistanceToStation   {
+    float dist;
+    
+    dist = [self calculateShortestDistance] + [self calculateShortestDistanceToUser];
+    NSLog(@"shortest distance from the user's position %f",dist);
+    return dist;
+    
+}
 @end
