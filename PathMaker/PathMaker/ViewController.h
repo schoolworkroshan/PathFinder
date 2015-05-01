@@ -15,6 +15,8 @@
 @property (nonatomic, retain) MKPolyline *routeLine;
 @property (nonatomic, retain) MKPolylineRenderer *routeLineView;
 @property (nonatomic,retain) NSMutableArray *arrayOfLocation;
+@property (retain,strong) NSMutableArray *arrayofAnnotation;
+//@property (retain,strong) NSMutableArray *arrayofAnnotation;
 @end
 
 
