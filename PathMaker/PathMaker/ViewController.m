@@ -11,6 +11,7 @@
 {
     NSMutableArray *distanceFromInitialPointDestination;
     CLLocation *coordinate;
+    NSMutableArray *valueArray;
 }
 
 @end
@@ -20,7 +21,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    [self arrayofLocs];
+    
+    [self initializeLocation];
+    //[self arrayofLocs];
     //Create Map Area
     self.locationManager = [[CLLocationManager alloc] init];
     
@@ -46,17 +49,31 @@
     
     //CLLocationCoordinate2D coordinate[3] = [
     
-    CLLocationCoordinate2D coordinates[18] = {{32.860717, -96.990722}, {32.860754, -96.990715},
-        {32.860812, -96.990710},{32.860877, -96.990713}, {32.860914, -96.990697},
-        {32.860917, -96.990610},{32.860912, -96.990504}, {32.860909, -96.990370}, {32.860908, -96.990223},
-        {32.860896, -96.990108}, {32.860841, -96.990101}, {32.860779, -96.990102},
-        {32.860706, -96.990105}, {32.860665, -96.990110}, {32.860680, -96.990333} ,
-        {32.860685, -96.990530}, {32.860695, -96.990679}, {32.860709, -96.990717}};
     
+    CLLocationCoordinate2D *coordinateArray
+    = malloc(sizeof(CLLocationCoordinate2D) * valueArray.count);
+    
+    int caIndex = 0;
+    for (CLLocation *loc in valueArray) {
+        coordinateArray[caIndex] = loc.coordinate;
+        caIndex++;
+    }
+    
+    
+//    CLLocationCoordinate2D coordinates[18] = {{32.860717, -96.990722}, {32.860754, -96.990715},
+//        {32.860812, -96.990710},{32.860877, -96.990713}, {32.860914, -96.990697},
+//        {32.860917, -96.990610},{32.860912, -96.990504}, {32.860909, -96.990370}, {32.860908, -96.990223},
+//        {32.860896, -96.990108}, {32.860841, -96.990101}, {32.860779, -96.990102},
+//        {32.860706, -96.990105}, {32.860665, -96.990110}, {32.860680, -96.990333} ,
+//        {32.860685, -96.990530}, {32.860695, -96.990679}, {32.860709, -96.990717}};
+//    
     //CLLocationCoordinate2D values = CLLocationCoordinate2DMake(32.860717, -96.990722);
     
+
     [self.mapView setRegion:region animated:YES];//
-        _routeLine= [MKPolyline polylineWithCoordinates:coordinates count:18];
+        _routeLine= [MKPolyline polylineWithCoordinates:coordinateArray count:[valueArray count]];
+
+        free(coordinateArray);
     self.mapView.mapType = MKMapTypeStandard;
     [self.mapView addOverlay:_routeLine];//
     [self.mapView setVisibleMapRect:_routeLine.boundingMapRect];
@@ -242,8 +259,8 @@
 }
 
 
--(NSMutableArray *) arrayofLocs {
-    NSMutableArray *valueArray = [[NSMutableArray alloc]init];
+- (void) initializeLocation{
+    valueArray = [[NSMutableArray alloc]init];
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860717 longitude:-96.990722]];
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860754 longitude:-96.990715]];
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860812 longitude: -96.990710]];
@@ -262,6 +279,11 @@
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860685 longitude:-96.990530]];
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860695 longitude:-96.990679]];
     [valueArray addObject:[[CLLocation alloc] initWithLatitude:32.860709 longitude:-96.990717]];
+
+}
+
+-(NSMutableArray *) arrayofLocs {
+    
     return valueArray;
 }
 
